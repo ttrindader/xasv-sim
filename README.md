@@ -1,15 +1,14 @@
-# xasv-simu
+# xasv-sim
 
 <p align="center">
-  <img src="docs/figs/logo.png" alt="xasv-simu logo" width="400">
+  <img src="docs/figs/logo.png" alt="xasv-sim logo" width="400">
 </p>
 
-**xasv-simu** is a clean GitHub distribution of the **xasv-sim** stack: a **ROS + ArduPilot + Gazebo** simulation environment for autonomous surface vessels (ASVs) in realistic river environments, with optional **X-in-the-Loop** workflows such as **MITL**, **SITL**, **HITL**, **RITL**, and **HuITL**.
+**xasv-sim** is a clean GitHub distribution of the **xasv-sim** stack: a **ROS + ArduPilot + Gazebo** simulation environment for autonomous surface vessels (ASVs) in realistic river environments, with optional **X-in-the-Loop** workflows such as **MITL**, **SITL**, **HITL**, **RITL**, and **HuITL**.
 
 This repository contains the reference simulation assets, ROS packages, Gazebo worlds, Blender-based modeling assets, custom plugins, and auxiliary scripts used in ASV navigation and inspection experiments.
 
 > **Important**  
-> This repository was reorganized **without Git LFS**.  
 > Large binary assets are stored outside GitHub in a **public Google Drive folder** and must be restored after cloning the repository.
 
 ---
@@ -18,15 +17,13 @@ This repository contains the reference simulation assets, ROS packages, Gazebo w
 
 **xasv-sim 1.0.0** is the first complete and stable release of the stack.
 
-This release freezes the core architecture, river worlds, ASV models and X-in-the-Loop workflows used in the associated **SoftwareX** article, so that other groups can reproduce and extend the reported experiments.
-
-This repository, **xasv-simu**, preserves that material while replacing the old Git LFS workflow with an external large-file distribution mechanism based on Google Drive.
+This release freezes the core architecture, river worlds, ASV models and X-in-the-Loop workflows used in the associated **IEEE-RA-P** article, so that other groups can reproduce and extend the reported experiments.
 
 ---
 
 ## Features
 
-xasv-simu offers a set of features aimed at realistic simulation and reproducible experiments:
+xasv-sim offers a set of features aimed at realistic simulation and reproducible experiments:
 
 - **Blender-based modeling and export**
   - ASV hulls, sensors and river infrastructures modeled in Blender.
@@ -52,10 +49,6 @@ xasv-simu offers a set of features aimed at realistic simulation and reproducibl
   - **HITL** – Hardware-in-the-Loop with physical flight controllers.
   - **RITL** – Render-in-the-Loop tools to vary appearance while preserving physics, for dataset generation and perception studies.
   - **HuITL** – Human-in-the-Loop tools for teleoperation, supervision and dataset collection for MLP training.
-
-- **Large-asset-friendly layout without Git LFS**
-  - Large binary assets are stored outside GitHub and retrieved separately from a public Google Drive folder.
-  - The repository remains lighter and easier to clone with standard Git.
 
 For a more detailed overview of the proposed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -155,9 +148,6 @@ Installation references:
 - rclone, optional:  
   https://rclone.org/
 
-> **Note**  
-> Git LFS is **not** required for this repository. Do not run `git lfs pull` for `xasv-simu`; the large assets are restored through the Google Drive workflow described below.
-
 ---
 
 ## Installation
@@ -182,8 +172,8 @@ rclone version
 ```bash
 mkdir -p ~/ros_ws/src
 cd ~/ros_ws/src
-git clone https://github.com/ttrindader/xasv-simu.git
-cd xasv-simu
+git clone https://github.com/ttrindader/xasv-sim.git
+cd xasv-sim
 ```
 
 ### 3) Download the large binary assets
@@ -208,7 +198,7 @@ xasv_sim/models/SAE_HYDRO_V0/meshes/logboom.dae
 From the repository root, the final structure must look like this:
 
 ```text
-xasv-simu/
+xasv-sim/
 ├── enviroments/
 │   └── blender/
 │       └── SAE_HYDRO_V0/
@@ -224,7 +214,7 @@ xasv-simu/
 Verify the files with:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 ls enviroments/blender/SAE_HYDRO_V0/main.blend
 ls enviroments/blender/SAE_HYDRO_V0/main.blend1
 ls xasv_sim/models/SAE_HYDRO_V0/meshes/logboom.dae
@@ -237,14 +227,14 @@ This option is intended mainly for maintainers or advanced users. The helper scr
 From the repository root:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 bash scripts/download_bigfiles.sh
 ```
 
 If your local helper script expects an explicit rclone remote/path, use the form below after configuring your remote:
 
 ```bash
-bash scripts/download_bigfiles.sh mydrive:xasv-simu
+bash scripts/download_bigfiles.sh mydrive:xasv-sim
 ```
 
 The list of externally stored files is maintained in:
@@ -257,20 +247,20 @@ scripts/drive_bigfiles.txt
 
 ```bash
 cd ~/ros_ws
-./src/xasv-simu/install_deps.sh ~/ros_ws
+./src/xasv-sim/install_deps.sh ~/ros_ws
 rosdep update
 rosdep install --from-paths src --ignore-src -r -y --skip-keys="mavros_msgs"
 sudo apt install python3-catkin-tools python3-osrf-pycommon
 catkin config --skiplist ardupilot_hitl   # initially, no HITL
 catkin build                               # or: catkin_make
-echo 'export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:~/ros_ws/src/xasv-simu/xasv_sim/models' >> ~/.bashrc
+echo 'export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:~/ros_ws/src/xasv-sim/xasv_sim/models' >> ~/.bashrc
 source ~/.bashrc
 source ~/ros_ws/devel/setup.bash
 ```
 
 ### 5) Plugin note
 
-Many core functionalities of xasv-simu rely on Gazebo plugins. They fall into two categories:
+Many core functionalities of xasv-sim rely on Gazebo plugins. They fall into two categories:
 
 - Standard plugins provided by ROS/Gazebo.
 - Vendored/custom plugins versioned under `xasv_sim/plugins` and built together with the workspace.
@@ -339,7 +329,7 @@ scripts/
 From the repository root:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 sudo docker compose build sim sitl tools
 bash scripts/docker_prepare_sim.sh
 ```
@@ -351,7 +341,7 @@ The `docker_prepare_sim.sh` helper prepares the simulation workspace inside the 
 #### Standard run
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 bash scripts/docker_run_sim.sh
 ```
 
@@ -374,7 +364,7 @@ sudo docker compose logs -f sim
 If the host is already configured for NVIDIA containers, start Gazebo with the NVIDIA override:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 xhost +local:
 sudo -E docker compose -f docker-compose.yml -f docker-compose.nvidia.yml up -d sim
 sudo docker compose logs -f sim
@@ -391,7 +381,7 @@ sudo -E docker compose -f docker-compose.yml -f docker-compose.nvidia.yml up sim
 On Linux hosts using Mesa/DRI, use the DRI override:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 xhost +local:
 sudo -E docker compose -f docker-compose.yml -f docker-compose.dri.yml up -d sim
 sudo docker compose logs -f sim
@@ -412,7 +402,7 @@ Look at the renderer/vendor strings. If the renderer shows `llvmpipe`, Gazebo is
 In another terminal:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 bash scripts/docker_run_sitl.sh
 ```
 
@@ -436,7 +426,7 @@ sudo docker compose exec sitl bash
 If you want MAVProxy in its own Docker service:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 xhost +local:
 sudo -E docker compose --profile mavproxy up -d mavproxy
 sudo docker compose logs -f mavproxy
@@ -479,7 +469,7 @@ sudo docker compose down
 ### Notes about the Docker approach
 
 - The native workflow remains the reference behavior.
-- Docker-specific wrappers should not require changes to the original xasv-simu source tree.
+- Docker-specific wrappers should not require changes to the original xasv-sim source tree.
 - Large assets still need to be restored through the Google Drive workflow before running the simulator, even in Docker.
 - If GPU acceleration is not active, Gazebo may start correctly but with very low FPS.
 
@@ -515,11 +505,11 @@ The following result is expected:
 
 ## 3D Modelling
 
-xasv-simu adopts a **Blender-first workflow** for both the river environments and the ASV robot model.
+xasv-sim adopts a **Blender-first workflow** for both the river environments and the ASV robot model.
 
 For environments, the user models the scene in Blender, including riverbed, dam structures, buoys, vegetation and other elements, and then runs the Python script `sdf_exporter.py`. This script walks over all visible mesh objects, exports one COLLADA `.dae` file per object, and automatically builds a complete Gazebo model with SDF, `model.config`, and `meshes/`. By default, the output is written under `~/.gazebo/models/<MODEL_NAME>/`, but both the base directory and the model name can be customized at the top of the script.
 
-For the ASV robot, the workflow is similar, but the output is a URDF/xacro instead of an SDF world. The hull, superstructure, collision boxes, and propellers are modeled in Blender as a single assembled scene with a visible `base_link`. A dedicated script, `migbot2_xacro_exporter.py`, adds an export entry to Blender’s menu and generates a set of COLLADA meshes plus a `migbot2.urdf.xacro` file that already includes simplified collisions, approximate inertias, and the Gazebo plugins used in xasv-simu, such as thrusters, buoyancy, USV dynamics and sensors.
+For the ASV robot, the workflow is similar, but the output is a URDF/xacro instead of an SDF world. The hull, superstructure, collision boxes, and propellers are modeled in Blender as a single assembled scene with a visible `base_link`. A dedicated script, `migbot2_xacro_exporter.py`, adds an export entry to Blender’s menu and generates a set of COLLADA meshes plus a `migbot2.urdf.xacro` file that already includes simplified collisions, approximate inertias, and the Gazebo plugins used in xasv-sim, such as thrusters, buoyancy, USV dynamics and sensors.
 
 For a step-by-step description of the Blender-to-Gazebo pipeline, both for worlds and for the ASV robot, see [docs/3DMODELLING.md](docs/3DMODELLING.md).
 
@@ -527,13 +517,13 @@ For a step-by-step description of the Blender-to-Gazebo pipeline, both for world
 
 ## X-in-the-Loop workflows
 
-xasv-simu supports several X-in-the-Loop modes, including **MITL**, **SITL**, **HITL**, **RITL** and **HuITL**, for progressively bringing models, software and hardware into the loop. Full descriptions, diagrams and background motivation are in [docs/XITL.md](docs/XITL.md). Below are short notes and the main entry-point commands to reproduce the reference workflows quickly.
+xasv-sim supports several X-in-the-Loop modes, including **MITL**, **SITL**, **HITL**, **RITL** and **HuITL**, for progressively bringing models, software and hardware into the loop. Full descriptions, diagrams and background motivation are in [docs/XITL.md](docs/XITL.md). Below are short notes and the main entry-point commands to reproduce the reference workflows quickly.
 
 ### MITL — Model-in-the-Loop
 
 MITL is used for teleoperated runs and ArduPilot waypoint mission generation for `migbot1`.
 
-In MITL, a human operator drives the ASV in the simulated river while ROS controllers apply forces to the virtual boat. During this run, xasv-simu records the GPS track and later converts it into an ArduPilot mission, for example a `.plan` file. This is the first step in the chain: you prototype missions and control ideas in pure simulation before engaging SITL or HITL.
+In MITL, a human operator drives the ASV in the simulated river while ROS controllers apply forces to the virtual boat. During this run, xasv-sim records the GPS track and later converts it into an ArduPilot mission, for example a `.plan` file. This is the first step in the chain: you prototype missions and control ideas in pure simulation before engaging SITL or HITL.
 
 ```bash
 # Simulator with ROS controllers; no ArduPilot
@@ -556,16 +546,16 @@ export MISSION_ALT="50"
 rosrun xasv_sim rosgps2mission.py   --bag "${BAG_NAME}"   --topic "/fix"   --points "${MISSION_POINTS}"   --format "${MISSION_FORMAT}"   --output "${MISSION_OUT}"   --alt "${MISSION_ALT}"
 
 # One-shot MITL demo; logboom test mission
-./src/xasv-simu/xasv_sim/tests/mitl_test.sh
+./src/xasv-sim/xasv_sim/tests/mitl_test.sh
 ```
 
 ### SITL — Software-in-the-Loop
 
-In SITL, the full ArduPilot Rover firmware runs as a program on your machine, while xasv-simu provides the river world, sensors and actuators via ROS + Gazebo. You keep the autopilot inside the loop without any hardware, which is ideal for tuning parameters, testing missions generated in MITL, and debugging guidance and control under repeatable conditions.
+In SITL, the full ArduPilot Rover firmware runs as a program on your machine, while xasv-sim provides the river world, sensors and actuators via ROS + Gazebo. You keep the autopilot inside the loop without any hardware, which is ideal for tuning parameters, testing missions generated in MITL, and debugging guidance and control under repeatable conditions.
 
 ```bash
 # One-time SITL configuration helper; installs Lua scripts/configs
-./src/xasv-simu/ardupilot_sitl/ardupilot_sitl_config.sh
+./src/xasv-sim/ardupilot_sitl/ardupilot_sitl_config.sh
 
 # Simulator with ArduPilot connections
 roslaunch xasv_sim xasv_sim.launch   world_name:=madeira_river   robot_name:=migbot1
@@ -574,15 +564,15 @@ roslaunch xasv_sim xasv_sim.launch   world_name:=madeira_river   robot_name:=mig
 ./gzboat.sh
 
 # One-shot SITL demo; uses the provided test mission
-./src/xasv-simu/xasv_sim/tests/sitl_test.sh
+./src/xasv-sim/xasv_sim/tests/sitl_test.sh
 ```
 
 ### HITL — Hardware-in-the-Loop
 
-HITL closes the loop with a real flight controller, such as Pixhawk 4, running a patched ArduPilot firmware, while xasv-simu still provides the virtual river, sensors and actuator loads. A dedicated ROS/MAVROS bridge sends simulated IMU/MAG/GPS data to the board and relays actuator commands back to Gazebo, so the hardware behaves as if it were driving a real boat. This mode is used to validate dynamics, I/O timing and complete guidance stacks before field trials.
+HITL closes the loop with a real flight controller, such as Pixhawk 4, running a patched ArduPilot firmware, while xasv-sim still provides the virtual river, sensors and actuator loads. A dedicated ROS/MAVROS bridge sends simulated IMU/MAG/GPS data to the board and relays actuator commands back to Gazebo, so the hardware behaves as if it were driving a real boat. This mode is used to validate dynamics, I/O timing and complete guidance stacks before field trials.
 
 > **Important**  
-> Current HITL support in xasv-simu is tied to a specific ArduPilot Rover firmware version, based on the custom HITL branch. In addition, MAVLink and MAVROS must be installed from source, since HITL in xasv-simu relies on custom Gazebo message definitions and custom MAVLink/MAVROS message types that are not provided by the prebuilt binary packages. Other firmware versions are not guaranteed to work out of the box and may require porting the patches.
+> Current HITL support in xasv-sim is tied to a specific ArduPilot Rover firmware version, based on the custom HITL branch. In addition, MAVLink and MAVROS must be installed from source, since HITL in xasv-sim relies on custom Gazebo message definitions and custom MAVLink/MAVROS message types that are not provided by the prebuilt binary packages. Other firmware versions are not guaranteed to work out of the box and may require porting the patches.
 
 See the HITL section in [docs/XITL.md](docs/XITL.md) for the exact branch and commit used in the experiments and for the full step-by-step installation procedure.
 
@@ -605,7 +595,7 @@ roslaunch ardupilot_hitl link.launch
 ./QGroundControl.AppImage
 
 # One-shot HITL demo; same reference mission
-./src/xasv-simu/xasv_sim/tests/hitl_test.sh
+./src/xasv-sim/xasv_sim/tests/hitl_test.sh
 ```
 
 ### RITL — Render-in-the-Loop
@@ -619,7 +609,7 @@ roslaunch xasv_sim xasv_sim.launch   world_name:=madeira_river_ritl   robot_name
 
 ### HuITL — Human-in-the-Loop
 
-HuITL explicitly involves a human operator in SITL runs. The ASV follows a predefined mission in AUTO while the operator applies local avoidance maneuvers, such as RC throttle and yaw, via a virtual joystick whenever obstacles threaten the path. xasv-simu logs these override actions and the corresponding sensor/state data, which are then used to train and evaluate learning-based avoidance policies.
+HuITL explicitly involves a human operator in SITL runs. The ASV follows a predefined mission in AUTO while the operator applies local avoidance maneuvers, such as RC throttle and yaw, via a virtual joystick whenever obstacles threaten the path. xasv-sim logs these override actions and the corresponding sensor/state data, which are then used to train and evaluate learning-based avoidance policies.
 
 ```bash
 # HuITL arena; SITL mode, with Livox enabled
@@ -635,11 +625,11 @@ roslaunch xasv_sim huitl_pre_train.launch
 rostopic pub /xasv/pretrain_stop std_msgs/Bool "data: true"
 
 # Train avoidance policy from collected HuITL dataset
-python3 src/xasv-simu/xasv_sim/scripts/train_supervised.py   --csv src/xasv-simu/xasv_sim/data/xasv_huitl_pretrain/*.csv   --epochs 50   --batch_size 64   --symmetry_aug   --out trained_rc_policy.pt
+python3 src/xasv-sim/xasv_sim/scripts/train_supervised.py   --csv src/xasv-sim/xasv_sim/data/xasv_huitl_pretrain/*.csv   --epochs 50   --batch_size 64   --symmetry_aug   --out trained_rc_policy.pt
 
 # Online policy node + wrapper for validation
 roslaunch xasv_sim apm.launch
-./src/xasv-simu/xasv_sim/scripts/xasv_huitl_policy_wrap.sh ~/ros_ws/trained_rc_policy.pt
+./src/xasv-sim/xasv_sim/scripts/xasv_huitl_policy_wrap.sh ~/ros_ws/trained_rc_policy.pt
 ```
 
 For all modes, additional details, assumptions and diagrams are available in [docs/XITL.md](docs/XITL.md).
@@ -647,8 +637,6 @@ For all modes, additional details, assumptions and diagrams are available in [do
 ---
 
 ## Large files and Google Drive workflow
-
-This repository **does not use Git LFS**.
 
 Large binary assets such as `.blend`, `.blend1`, `.dae`, textures, maps and other heavy files must be distributed separately through the public Google Drive folder:
 
@@ -712,8 +700,8 @@ After configuration, use one of the forms below, depending on how your local hel
 
 ```bash
 bash scripts/download_bigfiles.sh
-bash scripts/download_bigfiles.sh mydrive:xasv-simu
-bash scripts/upload_bigfiles.sh mydrive:xasv-simu
+bash scripts/download_bigfiles.sh mydrive:xasv-sim
+bash scripts/upload_bigfiles.sh mydrive:xasv-sim
 ```
 
 ### Maintainer rule
@@ -729,7 +717,7 @@ Do **not** add large binary files directly to GitHub. When a new large asset is 
 
 ## Troubleshooting
 
-Below are common issues seen when running xasv-simu, especially SITL/HITL, and quick fixes.
+Below are common issues seen when running xasv-sim, especially SITL/HITL, and quick fixes.
 
 ### Serial port `/dev/ttyACM0` permission denied — HITL
 
@@ -767,7 +755,7 @@ sudo systemctl disable ModemManager
 
 ### Sanity-check your `$PATH` — two ArduPilot trees: SITL vs HITL
 
-xasv-simu typically uses **two ArduPilot repositories**, one for SITL and one custom tree for HITL. A random `ardurover` in your `$PATH` can silently point to the wrong build.
+xasv-sim typically uses **two ArduPilot repositories**, one for SITL and one custom tree for HITL. A random `ardurover` in your `$PATH` can silently point to the wrong build.
 
 Quick checks:
 
@@ -940,7 +928,7 @@ source ~/ros_ws/devel/setup.bash
 Also verify that the large files were restored:
 
 ```bash
-cd ~/ros_ws/src/xasv-simu
+cd ~/ros_ws/src/xasv-sim
 ls enviroments/blender/SAE_HYDRO_V0/main.blend
 ls enviroments/blender/SAE_HYDRO_V0/main.blend1
 ls xasv_sim/models/SAE_HYDRO_V0/meshes/logboom.dae
@@ -953,11 +941,10 @@ ls xasv_sim/models/SAE_HYDRO_V0/meshes/logboom.dae
 **Symptoms**
 
 - The repository cloned successfully, but Gazebo or Blender cannot find `.blend`, `.blend1`, `.dae`, textures or meshes.
-- The command `git lfs pull` does nothing or is unavailable.
 
 **Cause**
 
-xasv-simu intentionally does **not** use Git LFS. Large assets are stored externally in Google Drive.
+Large assets are stored externally in Google Drive.
 
 **Fix**
 
@@ -1118,7 +1105,7 @@ Contributions, issue reports and feature requests are welcome.
 
 ## License
 
-The license for xasv-simu is being finalised.
+The license for xasv-sim is being finalised.
 
 Until a `LICENSE` file is added at the repository root, please treat this code as **research-only** and contact the maintainers before redistributing or relicensing it.
 
@@ -1126,7 +1113,7 @@ Until a `LICENSE` file is added at the repository root, please treat this code a
 
 ## Citation
 
-If xasv-simu is useful in your research, please cite the associated project and article. A formal citation entry, such as BibTeX, will be added here once the corresponding paper is published.
+If xasv-sim is useful in your research, please cite the associated project and article. A formal citation entry, such as BibTeX, will be added here once the corresponding paper is published.
 
 For now, a generic reference such as the following can be used/adapted:
 
