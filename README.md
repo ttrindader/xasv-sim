@@ -519,13 +519,9 @@ For a step-by-step description of the Blender-to-Gazebo pipeline, both for world
 
 xasv-sim supports several X-in-the-Loop modes, including **MITL**, **SITL**, **HITL**, **RITL** and **HuITL**, for progressively bringing models, software and hardware into the loop. Full descriptions, diagrams and background motivation are available in `docs/XITL.md`. Below are short notes and the main entry-point commands to reproduce the reference workflows quickly.
 
-A **low-resolution version of the demonstration video** (`XASV_Sim_Demo.mp4`)
-is included directly in this repository for quick access. A **high-resolution
-version** of the same video is available at:
+A **low-resolution version of the demonstration video** (`XASV_Sim_Demo.mp4`) is included directly in this repository for quick access. A **high-resolution version** of the same video is available at:
 
 [High-resolution XASV-Sim demonstration video](https://drive.google.com/file/d/1R5udpR7qqLipAaoThGod7nqmVP8DspQR/view?usp=drive_link)
-
-**HIGH-RESOLUTION-VIDEO-LINK**
 
 The video provides representative examples of the MITL, SITL, HITL, RITL and HuITL workflows described below.
 
